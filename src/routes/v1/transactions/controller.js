@@ -57,11 +57,6 @@ const updateTransaction = asyncHandler(async (req, res) => {
 const deleteTransaction = asyncHandler(async (req, res) => {
   const data = await service.deleteById(req.params.id, req.session);
 
-  const existingTransaction = await service.getById(req.id);
-
-  if (!existingTransaction)
-    throw createError(STATUSCODE.NOT_FOUND, "Transaction does not exist");
-
   responseHandler(
     res,
     data?.deleted ? [] : [data],
@@ -73,11 +68,6 @@ const deleteTransaction = asyncHandler(async (req, res) => {
 
 const restoreTransaction = asyncHandler(async (req, res) => {
   const data = await service.restoreById(req.params.id, req.session);
-
-  const existingTransaction = await service.getById(req.id);
-
-  if (!existingTransaction)
-    throw createError(STATUSCODE.NOT_FOUND, "Transaction does not exist");
 
   responseHandler(
     res,

@@ -66,11 +66,6 @@ const updateInventory = asyncHandler(async (req, res) => {
 const deleteInventory = asyncHandler(async (req, res) => {
   const data = await service.deleteById(req.params.id, req.session);
 
-  const existingInventory = await service.getById(req.id);
-
-  if (!existingInventory)
-    throw createError(STATUSCODE.NOT_FOUND, "Inventory does not exist");
-
   responseHandler(
     res,
     data?.deleted ? [] : [data],
@@ -82,11 +77,6 @@ const deleteInventory = asyncHandler(async (req, res) => {
 
 const restoreInventory = asyncHandler(async (req, res) => {
   const data = await service.restoreById(req.params.id, req.session);
-
-  const existingInventory = await service.getById(req.id);
-
-  if (!existingInventory)
-    throw createError(STATUSCODE.NOT_FOUND, "Inventory does not exist");
 
   responseHandler(
     res,

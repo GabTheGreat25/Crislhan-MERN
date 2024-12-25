@@ -63,18 +63,21 @@ const createNewProduct = [
 const updateProduct = [
   upload.array("image"),
   asyncHandler(async (req, res) => {
-    const oldData = await service.getById(req.params.id, session);
+    const oldData = await service.getById(req.params.id, req.session);
 
-    const uploadNewImages = await multipleImages(
-      req.files,
-      oldData?.image.map((image) => image.public_id) || [],
-    );
+    const uploadedImages =
+      req.files.length > 0
+        ? await multipleImages(
+            req.files,
+            oldData?.image.map((image) => image.public_id) || [],
+          )
+        : oldData.image;
 
     const data = await service.update(
       req.params.id,
       {
         ...req.body,
-        image: uploadNewImages,
+        image: uploadedImages,
       },
       req.session,
     );
@@ -85,11 +88,6 @@ const updateProduct = [
 
 const deleteProduct = asyncHandler(async (req, res) => {
   const data = await service.deleteById(req.params.id, req.session);
-
-  const existingProduct = await service.getById(req.id);
-
-  if (!existingProduct)
-    throw createError(STATUSCODE.NOT_FOUND, "Product does not exist");
 
   responseHandler(
     res,
@@ -102,11 +100,6 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 const restoreProduct = asyncHandler(async (req, res) => {
   const data = await service.restoreById(req.params.id, req.session);
-
-  const existingProduct = await service.getById(req.id);
-
-  if (!existingProduct)
-    throw createError(STATUSCODE.NOT_FOUND, "Product does not exist");
 
   responseHandler(
     res,

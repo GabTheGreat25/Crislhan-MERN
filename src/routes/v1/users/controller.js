@@ -103,16 +103,19 @@ const updateUser = [
   asyncHandler(async (req, res) => {
     const oldData = await service.getById(req.params.id);
 
-    const uploadNewImages = await multipleImages(
-      req.files,
-      oldData?.image.map((image) => image.public_id),
-    );
+    const uploadedImages =
+      req.files.length > 0
+        ? await multipleImages(
+            req.files,
+            oldData?.image.map((image) => image.public_id) || [],
+          )
+        : oldData.image;
 
     const data = await service.update(
       req.params.id,
       {
         ...req.body,
-        image: uploadNewImages,
+        image: uploadedImages,
       },
       req.session,
     );
@@ -124,11 +127,6 @@ const updateUser = [
 const deleteUser = asyncHandler(async (req, res) => {
   const data = await service.deleteById(req.params.id, req.session);
 
-  const existingUser = await service.getById(req.id);
-
-  if (!existingUser)
-    throw createError(STATUSCODE.NOT_FOUND, "User does not exist");
-
   responseHandler(
     res,
     data?.deleted ? [] : [data],
@@ -138,11 +136,6 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 const restoreUser = asyncHandler(async (req, res) => {
   const data = await service.restoreById(req.params.id, req.session);
-
-  const existingUser = await service.getById(req.id);
-
-  if (!existingUser)
-    throw createError(STATUSCODE.NOT_FOUND, "User does not exist");
 
   responseHandler(
     res,
