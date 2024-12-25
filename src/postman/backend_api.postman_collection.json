@@ -188,8 +188,13 @@
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "name",
-									"value": "gaabsyy25",
+									"key": "firstName",
+									"value": "gaabsyy",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "25",
 									"type": "text"
 								},
 								{
@@ -232,13 +237,18 @@
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "name",
-									"value": "customergabs",
+									"key": "firstName",
+									"value": "customer",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "gab",
 									"type": "text"
 								},
 								{
 									"key": "email",
-									"value": "customergabs@gmail.com",
+									"value": "customergab@gmail.com",
 									"type": "text"
 								},
 								{
@@ -281,8 +291,13 @@
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "name",
-									"value": "admingab",
+									"key": "firstName",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "gab",
 									"type": "text"
 								},
 								{
