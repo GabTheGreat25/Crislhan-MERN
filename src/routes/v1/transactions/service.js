@@ -6,20 +6,48 @@ const {
   extractToken,
   verifyToken,
 } = require("../../../middlewares/jwtHelper.js");
+const { RESOURCE } = require("../../../constants/index.js");
 const { v4: uuidv4 } = require("uuid");
 const { ENV } = require("../../../config/environment.js");
 const sdk = require("api")("@paymaya/v5.18#1bmd73pl9p4h9zf");
 
 async function getAll() {
-  return await model.find({ deleted: false });
+  return await model
+    .find({ deleted: false })
+    .populate("user")
+    .populate({
+      path: "product",
+      populate: {
+        path: "id",
+        model: RESOURCE.PRODUCTS,
+      },
+    });
 }
 
 async function getAllDeleted() {
-  return await model.find({ deleted: true });
+  return await model
+    .find({ deleted: true })
+    .populate("user")
+    .populate({
+      path: "product",
+      populate: {
+        path: "id",
+        model: RESOURCE.PRODUCTS,
+      },
+    });
 }
 
 async function getById(_id) {
-  return await model.findOne({ _id, deleted: false });
+  return await model
+    .findOne({ _id, deleted: false })
+    .populate("user")
+    .populate({
+      path: "product",
+      populate: {
+        path: "id",
+        model: RESOURCE.PRODUCTS,
+      },
+    });
 }
 
 async function add(body, session, headers) {

@@ -1,15 +1,19 @@
 const model = require("./model.js");
 
 async function getAll() {
-  return await model.find({ deleted: false });
+  return await model.find({ deleted: false }).populate("product");
 }
 
 async function getAllDeleted() {
-  return await model.find({ deleted: true });
+  return await model.find({ deleted: true }).populate("product");
 }
 
 async function getById(_id) {
   return await model.findOne({ _id, deleted: false });
+}
+
+async function getByProductId(productId) {
+  return await model.findOne({ product: productId, deleted: false });
 }
 
 async function add(body, session) {
@@ -40,6 +44,7 @@ module.exports = {
   getAll,
   getAllDeleted,
   getById,
+  getByProductId,
   add,
   update,
   deleteById,

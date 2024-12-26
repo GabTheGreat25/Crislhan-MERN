@@ -48,6 +48,14 @@ const createNewInventory = asyncHandler(async (req, res) => {
       "Product does not exist or has been deleted",
     );
 
+  const existingInventory = await service.getByProductId(req.body.product);
+
+  if (existingInventory)
+    throw createError(
+      STATUSCODE.BAD_REQUEST,
+      "Inventory for this product already exists",
+    );
+
   const data = await service.add({ ...req.body }, req.session);
 
   responseHandler(res, [data], "Inventory created successfully");
